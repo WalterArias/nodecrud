@@ -7,7 +7,7 @@ route.use(cors());
 
 
 route.get('/',(req,res)=>{
-    res.send('bienvenido a mi APP');
+    res.send('Bienvenido a la API: EMPRESA XYZ');
 })
 route.get('/api/articulos', (req, res) => {   
     conexion.query('SELECT * FROM articulo', (error,datos) => {
@@ -21,13 +21,13 @@ route.get('/api/articulos', (req, res) => {
 
 
 //consultar un articulo
-route.get('/api/articulos/:id', (req, res) => {
-    conexion.query('SELECT * FROM articulo where id = ?',[req.params.id] ,(error, dato)=> {
+route.get('/api/articulos/:codigo', (req, res) => {
+    conexion.query('SELECT * FROM articulo where codigo= ?',[req.params.id] ,(error, dato)=> {
         if (error) {
             throw error;
         } else {
             // res.send(dato);
-            res.send(dato[0].detalle);
+            res.send(dato[0].descripcion);
         }
     });
 });
@@ -49,12 +49,12 @@ route.get('/api/articulos/:id', (req, res) => {
 
  //editar articulo
 
- route.put('/api/articulos/:id', (req, res)=>{
+ route.put('/api/articulos/:codigo', (req, res)=>{
      let id =req.params.id;
      let detalle = req.body.detalle;
      let precio = req.body.precio;
      let stock = req.body.stock;
-     let sql = "UPDATE articulo SET  detalle = ?, precio = ?, stock = ? WHERE id = ?";
+     let sql = "UPDATE articulo SET  detalle = ?, precio = ?, stock = ? WHERE codigo = ?";
      conexion.query(sql, [detalle, precio, stock,id], (error,resultado)=>{
         if (error) {
             throw error;
@@ -66,8 +66,8 @@ route.get('/api/articulos/:id', (req, res) => {
 
 
  //borrar articulo
- route.delete('/api/articulos/:id', (req, res)=>{
-     let sql = "DELETE FROM articulo where id = ?";
+ route.delete('/api/articulos/:codigo', (req, res)=>{
+     let sql = "DELETE FROM articulo where codigo = ?";
      conexion.query(sql, [req.params.id],(error,resultado)=>{
         if (error) {
             throw error;

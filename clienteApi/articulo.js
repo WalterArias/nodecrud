@@ -6,7 +6,7 @@ let stock = document.getElementById('stock')
 let formularioArticulo = document.getElementById('formularioArticulo')
 var id = 0;
 let opcion = '';
-
+// Crear nuevo articulo
 let btnCrear = document.getElementById('btnCrear');
 btnCrear.addEventListener('click', () => {
   detalle.value = '';
@@ -15,7 +15,7 @@ btnCrear.addEventListener('click', () => {
   opcion = 'crear';
   frmArticulo.show()
 })
-
+//llenar la tabla con los datos de la api
 fetch(endpoint)
   .then(response => response.json())
   .then(datos => {
@@ -23,10 +23,10 @@ fetch(endpoint)
     for (let i = 0; i < datos.length; i++) {
       tablaDatos.innerHTML += ` 
         <tr>
-          <td>${datos[i].id}</td>
-          <td>${datos[i].detalle}</td>
+          <td>${datos[i].codigo}</td>
+          <td>${datos[i].descripcion}</td>
           <td>${datos[i].precio}</td>
-          <td>${datos[i].stock}</td>    
+          <td>${datos[i].existencia}</td>    
           <td>  <button type="button" class="btnEditar btn btn-primary"  data-bs-toggle="modal" data-bs-target="#frmEditar" >  Editar</button>    </td>    
           <td> <a class="btnborrar btn btn-danger">borrar</a></td>
         </tr>
@@ -49,7 +49,7 @@ on(document, 'click', '.btnborrar', e => {
   const id = fila.firstElementChild.innerHTML;
   alertify.confirm('Seguro que desea borrar',
     function () {
-      fetch(endpoint + id, {
+      fetch(endpoint + codigo, {
           method: 'DELETE'
         })
         .then(response => response.json())
@@ -84,14 +84,14 @@ formularioArticulo.addEventListener('submit', (e) => {
         body: JSON.stringify({
           detalle: detalle.value,
           precio: precio.value,
-          stock: stock.value
+          stock: existencia.value
         })
       })
       .then(response => response.json())
       .then(response => location.reload())
   }
   if (opcion == 'editar') {
-    fetch(endpoint+id, {
+    fetch(endpoint+codigo, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json'
@@ -99,7 +99,7 @@ formularioArticulo.addEventListener('submit', (e) => {
       body: JSON.stringify({
         detalle: detalle.value,
         precio: precio.value,
-        stock: stock.value
+        stock: existencia.value
       })
     })
     .then(response => response.json())

@@ -4,7 +4,7 @@ const mysql = require('mysql');
     host: 'localhost',
     user: 'root',
     password: '',
-    database: 'jscrud'
+    database: 'ejemploapi'
 }); 
 /* const conexion = mysql.createConnection({
     host: 'us-cdbr-east-04.cleardb.com',
