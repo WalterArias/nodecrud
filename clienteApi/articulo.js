@@ -1,17 +1,17 @@
 const endpoint = 'http://localhost:4000/api/articulos/';
 var frmArticulo = new bootstrap.Modal(document.getElementById('frmArticulo'))
-let detalle = document.getElementById('detalle')
+let descripcion = document.getElementById('descripcion')
 let precio = document.getElementById('precio')
-let stock = document.getElementById('stock')
+let existencia= document.getElementById('existencia')
 let formularioArticulo = document.getElementById('formularioArticulo')
-var id = 0;
+var codigo = 0;
 let opcion = '';
 // Crear nuevo articulo
 let btnCrear = document.getElementById('btnCrear');
 btnCrear.addEventListener('click', () => {
-  detalle.value = '';
+  descripcion.value = '';
   precio.value = '';
-  stock.value = '';
+  existencia = '';
   opcion = 'crear';
   frmArticulo.show()
 })
@@ -34,7 +34,7 @@ fetch(endpoint)
     }
   })
 
-//METODO PARA CAPTURAR LINEA DE LA TABLA
+//MÉTODO PARA CAPTURAR LINEA DE LA TABLA Y PASARLA A EDICION O BORRADO
 const on = (element, event, selector, handler) => {
   element.addEventListener(event, e => {
     if (e.target.closest(selector)) {
@@ -42,11 +42,12 @@ const on = (element, event, selector, handler) => {
     }
   })
 }
-//BORRAR
+
+//BORRAR UN REGISTRO
 
 on(document, 'click', '.btnborrar', e => {
   const fila = e.target.parentNode.parentNode;
-  const id = fila.firstElementChild.innerHTML;
+  codigo = fila.firstElementChild.innerHTML;  //captura el codigo de la linea seleccionada
   alertify.confirm('Seguro que desea borrar',
     function () {
       fetch(endpoint + codigo, {
@@ -61,18 +62,18 @@ on(document, 'click', '.btnborrar', e => {
 
 })
 
-//el boton editar para tomar los datos a editar
+//Llenado del formulario para editar
 on(document, 'click', '.btnEditar', e => {
   const fila = e.target.parentNode.parentNode;
-  id = fila.children[0].innerHTML;
-  detalle.value = fila.children[1].innerHTML;
+  codigo = fila.children[0].innerHTML;
+  descripcion.value = fila.children[1].innerHTML;
   precio.value = fila.children[2].innerHTML;
-  stock.value = fila.children[3].innerHTML;
+  existencia.value = fila.children[3].innerHTML;
   opcion = 'editar'
   frmArticulo.show()
 })
 
-//guardar o editar
+//Accion de guardar o editar
 formularioArticulo.addEventListener('submit', (e) => {
   e.preventDefault(); //prevenir envio automatico
   if (opcion == 'crear') {
@@ -82,24 +83,24 @@ formularioArticulo.addEventListener('submit', (e) => {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          detalle: detalle.value,
+          descripcion: descripcion.value,
           precio: precio.value,
-          stock: existencia.value
+          existencia: existencia.value
         })
       })
       .then(response => response.json())
       .then(response => location.reload())
   }
   if (opcion == 'editar') {
-    fetch(endpoint+codigo, {
+    fetch(endpoint + codigo, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        detalle: detalle.value,
+        descripcion: descripcion.value,
         precio: precio.value,
-        stock: existencia.value
+        existencia: existencia.value
       })
     })
     .then(response => response.json())

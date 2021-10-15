@@ -35,7 +35,7 @@ route.get('/api/articulos/:codigo', (req, res) => {
  //Insertar articulo
 
  route.post('/api/articulos/',(req,res)=>{
-    let data = {detalle:req.body.detalle, precio:req.body.precio,stock:req.body.stock};
+    let data = {descripcion:req.body.descripcion, precio:req.body.precio,existencia:req.body.existencia};
     let sql = "INSERT INTO articulo SET  ?"
     conexion.query(sql,data,(error, resultado)=>{
         if (error) {
@@ -50,12 +50,12 @@ route.get('/api/articulos/:codigo', (req, res) => {
  //editar articulo
 
  route.put('/api/articulos/:codigo', (req, res)=>{
-     let id =req.params.id;
-     let detalle = req.body.detalle;
+     let codigo = req.params.codigo;
+     let descripcion = req.body.descripcion;
      let precio = req.body.precio;
-     let stock = req.body.stock;
-     let sql = "UPDATE articulo SET  detalle = ?, precio = ?, stock = ? WHERE codigo = ?";
-     conexion.query(sql, [detalle, precio, stock,id], (error,resultado)=>{
+     let existencia = req.body.existencia;
+     let sql = "UPDATE articulo SET  descripcion = ?, precio = ?, existencia = ? WHERE codigo = ?";
+     conexion.query(sql, [descripcion, precio, existencia, codigo], (error,resultado)=>{
         if (error) {
             throw error;
         } else {           
@@ -68,7 +68,7 @@ route.get('/api/articulos/:codigo', (req, res) => {
  //borrar articulo
  route.delete('/api/articulos/:codigo', (req, res)=>{
      let sql = "DELETE FROM articulo where codigo = ?";
-     conexion.query(sql, [req.params.id],(error,resultado)=>{
+     conexion.query(sql, [req.params.codigo],(error,resultado)=>{
         if (error) {
             throw error;
         } else {           
